@@ -57,6 +57,19 @@ app.post('/participants', async (req, res) =>{
     } catch(err){
         res.sendStatus(500);
     }
+});
+
+app.get('/participants', async (req, res) => {
+    try{
+        const online = await db.collection("participants").find().toArray();
+        if(online.length === 0){
+            res.send([]);
+        } else{
+            res.send(online);
+        }
+    } catch(err){
+        return res.sendStatus(500);
+    }
 })
 
 
