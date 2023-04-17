@@ -8,7 +8,7 @@ dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json());
-const client = new MongoClient('mongodb://127.0.0.1:27017');
+const client = new MongoClient(process.env.DATABASE_URL);
 let db;
 
 const nameSchema = Joi.object({
