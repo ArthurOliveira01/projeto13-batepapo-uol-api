@@ -8,7 +8,7 @@ dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json());
-const client = new MongoClient(process.env.DATABASE_URL);
+const client = new MongoClient('mongodb://127.0.0.1:27017');
 let db;
 
 const nameSchema = Joi.object({
@@ -96,7 +96,7 @@ app.post('/messages', async (req, res) => {
     
 	
     try{
-	   const information = {from: user, to, text, type, new Date(time).toLocaleTimeString('pt-br')}
+	   const information = {from: user, to, text, type, time: new Date(time).toLocaleTimeString('pt-br')}
 	   const validation = pstmessageSchema.validate(information, {abortEarly: false});
 	   if(validation.error){
 	   	return res.sendStatus(422);
