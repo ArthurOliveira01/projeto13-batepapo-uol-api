@@ -92,13 +92,14 @@ app.get('/participants', async (req, res) => {
 app.post('/messages', async (req, res) => {
     const {to, text, type} = req.body;
     const {user} = req.headers;
+    const time = Date.now();
     
 	
     try{
-	   const information = {from: user, to, text, type, }
-//	    const validation = pstmessageSchema.validate(
+	   const information = {from: user, to, text, type, new Date(time).toLocaleTimeString('pt-br')}
+	   const validation = pstmessageSchema.validate(information, {abortEarly: false);
 	} catch{
-		res.sendStatus(422);    
+		res.sendStatus(500);    
 	}
 
 });
