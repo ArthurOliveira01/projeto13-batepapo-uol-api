@@ -8,12 +8,18 @@ dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json());
-const client = new MongoClient(process.env.DATABASE_URL);
+const client = new MongoClient('mongodb://127.0.0.1:27017');
 let db;
 
 const nameSchema = Joi.object({
     name: Joi.string().min(1)
 });
+
+const messageSchema = Joi.object({
+    to: Joi.string().required().not().empty(),
+    text: Joi.string().required().not().empty(),
+    type: Joi.string().required().valid('message', 'private_message')
+})
 
 
 
@@ -29,12 +35,12 @@ console.log('vamo nessa, testando uol backend');
 app.post('/participants', async (req, res) =>{
     const {name} = req.body;
     const validation = nameSchema.validate(req.body);
-    if(validation.error){
-        console.log(validation.error)
-        return res.sendStatus(422);
-    }
 
     try{
+        if(validation.error){
+            console.log('foi errado')
+            return res.sendStatus(422);
+        }
         const exists = await db.collection("participants").findOne({name: name});
         if(exists){
             console.log('já tem alguem assim ai')
@@ -70,7 +76,17 @@ app.get('/participants', async (req, res) => {
     } catch(err){
         return res.sendStatus(500);
     }
-})
+});
+
+app.post('/messages', async (req, res) => {
+    const {to, text, type} = req.body;
+    const {user} = req.headers;
+
+});
+
+app.get('/messages', async (req, res) => {
+
+});
 
 
 app.listen(5000);
