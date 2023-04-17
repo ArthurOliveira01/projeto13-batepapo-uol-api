@@ -28,14 +28,16 @@ console.log('vamo nessa, testando uol backend');
 
 app.post('/participants', async (req, res) =>{
     const {name} = req.body;
-    const validation = nameSchema.validate(name);
+    const validation = nameSchema.validate(req.body);
     if(validation.error){
+        console.log(validation.error)
         return res.sendStatus(422);
     }
 
     try{
         const exists = await db.collection("participants").findOne({name: name});
         if(exists){
+            console.log('já tem alguem assim ai')
             return res.sendStatus(409);
         }
         const userReady = {
@@ -58,6 +60,4 @@ app.post('/participants', async (req, res) =>{
 })
 
 
-app.listen(5000, () => {
-
-});
+app.listen(5000);
