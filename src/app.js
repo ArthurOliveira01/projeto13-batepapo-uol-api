@@ -97,7 +97,13 @@ app.post('/messages', async (req, res) => {
 	
     try{
 	   const information = {from: user, to, text, type, new Date(time).toLocaleTimeString('pt-br')}
-	   const validation = pstmessageSchema.validate(information, {abortEarly: false);
+	   const validation = pstmessageSchema.validate(information, {abortEarly: false});
+	   if(validation.error){
+	   	return res.sendStatus(422);
+	   }
+	   await db.collection("messages").insertOne(information);
+	   res.sendStatus(200);
+								   
 	} catch{
 		res.sendStatus(500);    
 	}
