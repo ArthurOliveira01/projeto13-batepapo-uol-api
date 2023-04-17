@@ -51,6 +51,7 @@ app.post('/participants', async (req, res) =>{
             time: `${new Date(userReady.lastStatus).toLocaleTimeString()}`
         }
         await db.collection('messages').insertOne(text);
+        res.sendStatus(201);
     } catch(err){
         res.sendStatus(500);
     }
