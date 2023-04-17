@@ -21,8 +21,16 @@ const messageSchema = Joi.object({
     type: Joi.string().required().valid('message', 'private_message')
 });
 
-const limitSchema = Joi.onject({
+const limitSchema = Joi.object({
 	limit: Joi.number().min(1).integer()
+});
+
+const pstmessageSchema = Joi.object({
+	from: Joi.string().required(), 
+	to: Joi.string().required().min(1).max(20),
+	text: Joi.string().required().min(1).max(90),
+	type: Joi.string().required().valid("message", "private_message"),
+	time: Joi.string()
 });
 
 
@@ -84,6 +92,14 @@ app.get('/participants', async (req, res) => {
 app.post('/messages', async (req, res) => {
     const {to, text, type} = req.body;
     const {user} = req.headers;
+    
+	
+    try{
+	   const information = {from: user, to, text, type, }
+//	    const validation = pstmessageSchema.validate(
+	} catch{
+		res.sendStatus(422);    
+	}
 
 });
 
