@@ -120,7 +120,7 @@ app.get('/messages', async (req, res) => {
 	}
 	
 	try{
-		const messages = await db.collection("messages").find({$or: [{to: 'Todos}, {to: user}, {from: user}]}).toArray();
+		const messages = await db.collection("messages").find({$or: [{to: 'Todos'}, {to: user}, {from: user}]}).toArray();
 		res.send(messages.splice(messages.length - limit, limit));
 	}catch{
 		res.sendStatus(500);
