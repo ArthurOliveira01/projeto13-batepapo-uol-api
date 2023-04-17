@@ -19,8 +19,11 @@ const messageSchema = Joi.object({
     to: Joi.string().required().not().empty(),
     text: Joi.string().required().not().empty(),
     type: Joi.string().required().valid('message', 'private_message')
-})
+});
 
+const limitSchema = Joi.onject({
+	limit: Joi.number().min(1).integer()
+});
 
 
 client.connect().then(() => {
@@ -85,7 +88,20 @@ app.post('/messages', async (req, res) => {
 });
 
 app.get('/messages', async (req, res) => {
-
+	const {limit} = req.query;
+	const {user} = req.headers;
+	
+	const validation = limitSchema.validate({limit});
+	if(validation.error){
+		return res.sendStatus(422);
+	}
+	
+	try{
+		const messages = await db.collection("messages").find({$or: [{to: 'Todos}, {to: user}, {from: user}]}).toArray();
+		res.send(messages.splice(messages.length - limit, limit));
+	}catch{
+		res.sendStatus(500);
+	}
 });
 
 
