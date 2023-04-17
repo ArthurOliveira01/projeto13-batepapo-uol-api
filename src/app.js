@@ -56,7 +56,7 @@ app.post('/participants', async (req, res) =>{
             to: 'Todos',
             text: 'entra na sala...',
             type: 'status',
-            time: `${new Date(userReady.lastStatus).toLocaleTimeString()}`
+            time: `${new Date(userReady.lastStatus).toLocaleTimeString(pt-br)}`
         }
         await db.collection('messages').insertOne(text);
         res.sendStatus(201);
